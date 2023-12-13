@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 typedef struct each_word
@@ -20,7 +21,7 @@ typedef struct each_word
     int occurrences;
 } words_t;
 
-void print_lines(char * word, int occurrences)
+void print_line(char * word, int occurrences)
 {
     // Maybe should also determine the longest word and then print out after the longest word length as well
     printf("%s: ", word);
@@ -54,6 +55,39 @@ int count_words(FILE *to_read)
     return num_words;
 }
 
+int add_unique(words_t * words, char * to_insert, int insert_index, int array_size)
+{
+    for (int i = 0; i < array_size; i++)
+    {
+        if (strcmp(words[i].word, to_insert) == 0)
+        {
+            words[i].occurrences++;
+            return 1;
+        }
+    }
+
+    strcpy(words[insert_index].word, to_insert);
+    words[insert_index].occurrences++;
+    return 0;
+}
+
+void add_words(words_t * words, FILE * input)
+{
+    char buffer[256];
+
+    int struct_size = 0;
+
+    int struct_index = 0;
+
+    while (fscanf(input, " %255s", buffer) == 1)
+    {
+        struct_size++;
+        add_unique(words, buffer, struct_index, struct_size);
+        struct_index++;
+    }
+}
+
+
 int main(int argc, char * argv[])
 {
 
@@ -69,7 +103,14 @@ int main(int argc, char * argv[])
 
     words_t words[word_count];
 
+    add_words(words, input);
 
+    int index_to_print = 0;
+    while (words[index_to_print].occurrences > 0)
+    {
+        print_line(words[index_to_print].word, words[index_to_print].occurrences);
+    }
+    return 0;
 }
 
 
