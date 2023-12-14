@@ -37,21 +37,26 @@ int count_words(FILE *to_read)
     int num_words = 0;
 
     int character;
-    int prev_is_space = 0;
+    int in_word = 0;
 
     while ((character = fgetc(to_read)) != EOF)
     {
+        printf("character: %d\n", character);
         if (isspace(character))
         {
-            prev_is_space++;
+            //if (!in_word)
+            //{
+                num_words++;
+                in_word = 1;
+            //}
         }
         else
         {
-            if (prev_is_space) num_words++;
-            prev_is_space = 0;
+            in_word = 0;
         }
     }
 
+    if (in_word) num_words++;
     return num_words;
 }
 
@@ -90,6 +95,10 @@ void add_words(words_t * words, FILE * input)
 
 int main(int argc, char * argv[])
 {
+    if (argc != 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return 1;
+    }
 
     FILE *input = fopen(argv[1], "r");
 
