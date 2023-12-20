@@ -109,6 +109,9 @@ int main(int argc, char * argv[])
     }
 
     int word_count = count_words(input);
+    rewind(input);
+
+    printf("WORD COUNT: %d\n", word_count);
 
     words_t words[word_count];
 
@@ -119,6 +122,9 @@ int main(int argc, char * argv[])
     {
         print_line(words[index_to_print].word, words[index_to_print].occurrences);
     }
+
+    fclose(input);
+
     return 0;
 }
 
