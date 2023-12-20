@@ -127,6 +127,7 @@ int main(int argc, char * argv[])
     while (words[index_to_print].occurrences > 0)
     {
         print_line(words[index_to_print].word, words[index_to_print].occurrences);
+        index_to_print++;
     }
 
     free(words);
