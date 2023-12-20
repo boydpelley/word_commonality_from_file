@@ -35,28 +35,20 @@ void print_line(char * word, int occurrences)
 int count_words(FILE *to_read)
 {
     int num_words = 0;
-
     int character;
-    int in_word = 0;
-
+    int prev_is_space = 1;
     while ((character = fgetc(to_read)) != EOF)
     {
-        printf("character: %d\n", character);
         if (isspace(character))
         {
-            //if (!in_word)
-            //{
-                num_words++;
-                in_word = 1;
-            //}
+            prev_is_space++;
         }
         else
         {
-            in_word = 0;
+            if (prev_is_space) num_words++;
+            prev_is_space = 0;
         }
     }
-
-    if (in_word) num_words++;
     return num_words;
 }
 
