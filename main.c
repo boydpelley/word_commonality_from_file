@@ -32,7 +32,15 @@ words_t * new_word_list (int num_words)
     return words;
 }
 
-int compare(const void * x, const void * y)
+int order_words(const void * x, const void * y)
+{
+    words_t * first = (words_t *)x;
+    words_t * second = (words_t *)y;
+
+    return strcmp(first->word, second->word);
+}
+
+int order_numbers(const void * x, const void * y)
 {
     words_t * first = (words_t *)x;
     words_t * second = (words_t *)y;
@@ -164,7 +172,8 @@ int main(int argc, char * argv[])
 
     int num_unique = add_words(words, input, word_count);
 
-    qsort(words, num_unique, sizeof(words_t), compare);
+    qsort(words, num_unique, sizeof(words_t), order_words);
+    qsort(words, num_unique, sizeof(words_t), order_numbers);
 
     int maximum_word_length = get_longest_word_length(words);
 
