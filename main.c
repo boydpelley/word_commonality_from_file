@@ -64,12 +64,12 @@ int count_words(FILE *to_read)
     return num_words;
 }
 
-int add_unique(words_t * words, char * to_insert, int insert_index, int array_size)
+int add_unique(words_t * words, char * to_insert, int * insert_index, int array_size)
 {
     assert(words);
     for (int i = 0; i < array_size; i++)
     {
-        if (words[i].word == NULL) break;
+        if (words[i].occurrences == 0) break;
         if (strcmp(words[i].word, to_insert) == 0)
         {
             words[i].occurrences++;
@@ -77,8 +77,9 @@ int add_unique(words_t * words, char * to_insert, int insert_index, int array_si
         }
     }
 
-    strcpy(words[insert_index].word, to_insert);
-    words[insert_index].occurrences++;
+    strcpy(words[*insert_index].word, to_insert);
+    words[*insert_index].occurrences++;
+    (*insert_index)++;
     return 0;
 }
 
@@ -93,8 +94,8 @@ void add_words(words_t * words, FILE * input, int word_count)
 
     while (fscanf(input, " %255s", buffer) == 1)
     {
-        add_unique(words, buffer, struct_index, word_count);
-        struct_index++;
+        add_unique(words, buffer, &struct_index, word_count);
+
     }
 }
 
