@@ -33,6 +33,14 @@ words_t * new_word_list (int num_words)
     return words;
 }
 
+int compare(const void * x, const void * y)
+{
+    words_t * first = (words_t *)x;
+    words_t * second = (words_t *)y;
+
+    return (second->occurrences - first->occurrences);
+}
+
 void print_line(char * word, int occurrences)
 {
     // Maybe should also determine the longest word and then print out after the longest word length as well
@@ -67,6 +75,7 @@ int count_words(FILE *to_read)
 int add_unique(words_t * words, char * to_insert, int * insert_index, int array_size)
 {
     assert(words);
+
     for (int i = 0; i < array_size; i++)
     {
         if (words[i].occurrences == 0) break;
@@ -78,25 +87,31 @@ int add_unique(words_t * words, char * to_insert, int * insert_index, int array_
     }
 
     strcpy(words[*insert_index].word, to_insert);
+
     words[*insert_index].occurrences++;
     (*insert_index)++;
+
     return 0;
 }
 
-void add_words(words_t * words, FILE * input, int word_count)
+int add_words(words_t * words, FILE * input, int word_count)
 {
     assert(words);
-    char buffer[256];
 
-    int struct_size = 0;
+    char buffer[256];
 
     int struct_index = 0;
 
+    int num_unique = 0;
+
     while (fscanf(input, " %255s", buffer) == 1)
     {
-        add_unique(words, buffer, &struct_index, word_count);
-
+        if (add_unique(words, buffer, &struct_index, word_count) == 0)
+        {
+            num_unique++;
+        }
     }
+    return num_unique;
 }
 
 
@@ -122,7 +137,9 @@ int main(int argc, char * argv[])
 
     words_t *words = new_word_list(word_count);
 
-    add_words(words, input, word_count);
+    int num_unique = add_words(words, input, word_count);
+
+    qsort(words, num_unique, sizeof(words_t), compare);
 
     int index_to_print = 0;
     while (words[index_to_print].occurrences > 0)
