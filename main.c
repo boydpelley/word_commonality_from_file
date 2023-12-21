@@ -41,14 +41,22 @@ int compare(const void * x, const void * y)
     return (second->occurrences - first->occurrences);
 }
 
-void print_line(char * word, int occurrences)
+void print_line(char * word, int occurrences, int longest_length)
 {
-    // Maybe should also determine the longest word and then print out after the longest word length as well
+    int spaces_after_word = longest_length - strlen(word);
+
     printf("%s: ", word);
+
+    for (int i = 0; i < spaces_after_word; i++)
+    {
+        printf(" ");
+    }
+
     for (int i = 0; i < occurrences; i++)
     {
         printf("*");
     }
+
     printf("\n");
 }
 
@@ -114,6 +122,23 @@ int add_words(words_t * words, FILE * input, int word_count)
     return num_unique;
 }
 
+int get_longest_word_length(words_t * words)
+{
+    int maximum_length = strlen(words[0].word);
+
+    int i = 0;
+    while (words[i].occurrences > 0)
+    {
+        if (strlen(words[i].word) > maximum_length)
+        {
+            maximum_length = strlen(words[i].word);
+        }
+        i++;
+    }
+
+    return maximum_length;
+}
+
 
 int main(int argc, char * argv[])
 {
@@ -133,7 +158,7 @@ int main(int argc, char * argv[])
     int word_count = count_words(input);
     rewind(input);
 
-    printf("WORD COUNT: %d\n", word_count);
+    printf("\nWORD COUNT: %d\n\n", word_count);
 
     words_t *words = new_word_list(word_count);
 
@@ -141,10 +166,12 @@ int main(int argc, char * argv[])
 
     qsort(words, num_unique, sizeof(words_t), compare);
 
+    int maximum_word_length = get_longest_word_length(words);
+
     int index_to_print = 0;
     while (words[index_to_print].occurrences > 0)
     {
-        print_line(words[index_to_print].word, words[index_to_print].occurrences);
+        print_line(words[index_to_print].word, words[index_to_print].occurrences, maximum_word_length);
         index_to_print++;
     }
 
