@@ -1,4 +1,4 @@
-# word_commonality_from_file
+# Word Commonality
   This program takes a .txt file on the command line, and reads over the file word by word, ordering them from most common to least common. 
 It outputs * characters next to the words, representing the amount of occurrences. The program also displays the total word count from the file, 
 and the asterics are displayed all in-line with one another so the histogram is better represented.
