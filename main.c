@@ -13,7 +13,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <assert.h>
 
 typedef struct each_word
@@ -65,6 +64,7 @@ int count_words(FILE *to_read)
     int num_words = 0;
     int character;
     int prev_is_space = 1;
+
     while ((character = fgetc(to_read)) != EOF)
     {
         if (isspace(character))
@@ -180,11 +180,3 @@ int main(int argc, char * argv[])
 
     return 0;
 }
-
-
-// STEPS:
-// https://stackoverflow.com/questions/6105513/need-help-using-qsort-with-an-array-of-structs
-// maybe implement arraylist.
-// 1. Make array of word length
-// 2. Could sort alphabetically first
-// 3. qsort
