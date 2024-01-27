@@ -23,4 +23,3 @@ characters.
 
 ### Future Considerations
 - Prompt user if they wanted to make an output file instead.
-- Sort alphabetically for words that have the same number of occurrences.
