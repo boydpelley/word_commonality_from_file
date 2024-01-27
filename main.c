@@ -241,7 +241,8 @@ int main(int argc, char * argv[])
     int word_count = count_words(input);
     rewind(input);
 
-    printf("\nWORD COUNT: %d\n\n", word_count);
+    if (output_type == 1) printf("\nWORD COUNT: %d\n\n", word_count);
+    else if (output_type == 2) fprintf(output, "\nWORD COUNT: %d\n\n", word_count);
 
     words_t *words = new_word_list(word_count);
 
