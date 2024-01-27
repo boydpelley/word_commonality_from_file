@@ -77,6 +77,27 @@ void print_line(char * word, int occurrences, int longest_length)
     printf("\n");
 }
 
+void output_file(char * word, int occurrences, int longest_length, FILE *output)
+{
+    int spaces_after_word = longest_length - strlen(word);
+
+    fprintf(output, "%s: ", word);
+
+    for (int i = 0; i < spaces_after_word; i++)
+    {
+        fprintf(output, " ");
+    }
+
+    for (int i = 0; i < occurrences; i++)
+    {
+        fprintf(output, "*");
+    }
+
+    fprintf(output, " %d", occurrences);
+
+    fprintf(output, "\n");
+}
+
 int count_words(FILE *to_read)
 {
     int num_words = 0;
@@ -172,6 +193,38 @@ int main(int argc, char * argv[])
         printf("Invalid entry. Try again.\n");
     }
 
+    printf("\n\nWould you like the output in terminal or text file?\n");
+    printf("1. TERMINAL\n2. TEXT FILE\n");
+
+    short output_type = 0;
+    while (output_type != 1 || output_type != 2)
+    {
+        scanf("%hd", &output_type);
+
+        if (output_type == 1 || output_type == 2) break;
+        printf("Invalid entry. Try again.\n");
+    }
+
+    FILE *output;
+    if (output_type == 2)
+    {
+        char * output_file_name;
+
+        // Assuming that the file name can't be over 50 characters
+        output_file_name = (char *)malloc(50 * sizeof(char *));
+
+        printf("Please name your file:\n");
+        scanf("%s", output_file_name);
+
+        output = fopen(output_file_name, "w");
+
+        if (output == NULL)
+        {
+            printf("Error with opening file.\n");
+            return 1;
+        }
+    }
+
     if (argc != 2) {
         printf("Usage: %s <filename>\n", argv[0]);
         return 1;
@@ -210,12 +263,20 @@ int main(int argc, char * argv[])
     int index_to_print = 0;
     while (words[index_to_print].occurrences > 0)
     {
-        print_line(words[index_to_print].word, words[index_to_print].occurrences, maximum_word_length);
+        if (output_type == 1)
+        {
+            print_line(words[index_to_print].word, words[index_to_print].occurrences,maximum_word_length);
+        }
+        else if (output_type == 2)
+        {
+            output_file(words[index_to_print].word, words[index_to_print].occurrences,maximum_word_length, output);
+        }
         index_to_print++;
     }
 
     free(words);
     fclose(input);
+    fclose(output);
 
     return 0;
 }
