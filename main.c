@@ -40,12 +40,20 @@ int order_words(const void * x, const void * y)
     return strcmp(first->word, second->word);
 }
 
-int order_numbers(const void * x, const void * y)
+int order_numbers_desc(const void * x, const void * y)
 {
     words_t * first = (words_t *)x;
     words_t * second = (words_t *)y;
 
     return (second->occurrences - first->occurrences);
+}
+
+int order_numbers_asc(const void * x, const void * y)
+{
+    words_t  * first = (words_t *)x;
+    words_t * second = (words_t *)y;
+
+    return (first->occurrences - second->occurrences);
 }
 
 void print_line(char * word, int occurrences, int longest_length)
@@ -63,6 +71,8 @@ void print_line(char * word, int occurrences, int longest_length)
     {
         printf("*");
     }
+
+    printf(" %d", occurrences);
 
     printf("\n");
 }
@@ -150,6 +160,18 @@ int get_longest_word_length(words_t * words)
 
 int main(int argc, char * argv[])
 {
+    printf("What kind of sorting would you like?\n");
+    printf("1. DESCENDING\n2. ASCENDING\n");
+
+    short sorting_type = 0;
+    while (sorting_type != 1 || sorting_type != 2)
+    {
+        scanf("%hd", &sorting_type);
+
+        if (sorting_type == 1 || sorting_type == 2) break;
+        printf("Invalid entry. Try again.\n");
+    }
+
     if (argc != 2) {
         printf("Usage: %s <filename>\n", argv[0]);
         return 1;
@@ -173,7 +195,15 @@ int main(int argc, char * argv[])
     int num_unique = add_words(words, input, word_count);
 
     qsort(words, num_unique, sizeof(words_t), order_words);
-    qsort(words, num_unique, sizeof(words_t), order_numbers);
+    switch (sorting_type)
+    {
+        case 1:
+            qsort(words, num_unique, sizeof(words_t), order_numbers_desc);
+            break;
+        case 2:
+            qsort(words, num_unique, sizeof(words_t), order_numbers_asc);
+            break;
+    }
 
     int maximum_word_length = get_longest_word_length(words);
 
