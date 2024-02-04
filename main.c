@@ -23,6 +23,7 @@ typedef struct each_word
 
 words_t * new_word_list (int num_words)
 {
+    // Allocate memory for the maximum amount of words
     words_t * words = malloc(num_words * sizeof(words_t));
     for (int i = 0; i < num_words; i++)
     {
@@ -104,6 +105,7 @@ int count_words(FILE *to_read)
     int character;
     int prev_is_space = 1;
 
+    // Checks for spaces in the word output, accounting for new line characters
     while ((character = fgetc(to_read)) != EOF)
     {
         if (isspace(character))
@@ -123,6 +125,7 @@ int add_unique(words_t * words, char * to_insert, int * insert_index, int array_
 {
     assert(words);
 
+    // This increases the number of the occurrences for the given word if it exists in the list already
     for (int i = 0; i < array_size; i++)
     {
         if (words[i].occurrences == 0) break;
@@ -133,6 +136,7 @@ int add_unique(words_t * words, char * to_insert, int * insert_index, int array_
         }
     }
 
+    // Otherwise, it gets inserted into the list as a new word, and the occurrence gets increased to 1.
     strcpy(words[*insert_index].word, to_insert);
 
     words[*insert_index].occurrences++;
@@ -151,6 +155,7 @@ int add_words(words_t * words, FILE * input, int word_count)
 
     int num_unique = 0;
 
+    // Adds unique words and increases the word count, returning the number of unique words
     while (fscanf(input, " %255s", buffer) == 1)
     {
         if (add_unique(words, buffer, &struct_index, word_count) == 0)
@@ -161,6 +166,7 @@ int add_words(words_t * words, FILE * input, int word_count)
     return num_unique;
 }
 
+// Method is used for the output, so that the histogram outputs at the same character
 int get_longest_word_length(words_t * words)
 {
     int maximum_length = strlen(words[0].word);
