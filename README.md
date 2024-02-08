@@ -22,4 +22,4 @@ characters.
 - File must be a .txt file or equivalent.
 
 ### Future Considerations
-- Prompt user if they wanted to make an output file instead.
+- Add rendering with SDL to output an actual histogram, then maybe allow users to save file to pdf
